@@ -9,7 +9,7 @@ pub use switchboard_v2::{
     OracleQueueAccountData, PermissionAccountData, SbState, VrfAccountData, VrfRequestRandomness,
 };
 
-declare_id!("EmPZGD34KDCtdwtqJU5VGoqidDQLyW1eyBXvj4yb2W9i");
+declare_id!("Ak2Nbu9xwhmMjazYxU5Hmy1xW6T8ffVrPTZhToB7T6F");
 
 #[program]
 pub mod vrf_client {
@@ -19,6 +19,12 @@ pub mod vrf_client {
     pub fn init_client(ctx: Context<InitClient>, params: InitClientParams) -> Result<()> {
         InitClient::actuate(&ctx, &params)
     }
+
+    pub fn add_raffle(ctx: Context<AddRaffle>, raffle: Pubkey) -> Result<()> {
+        ctx.accounts.add_raffle.raffle = raffle;
+        Ok(())
+    }
+
 
     #[access_control(ctx.accounts.validate(&ctx, &params))]
     pub fn request_randomness(
@@ -38,6 +44,25 @@ pub mod vrf_client {
 }
 
 const STATE_SEED: &[u8] = b"CLIENTSEED";
+
+#[account]
+#[derive(Default)]
+pub struct RaffleAccount {
+    pub raffle: Pubkey
+}
+
+#[derive(Accounts)]
+pub struct AddRaffle<'info> {
+    #[account(
+        init,
+        payer = signer,
+        space = 1024,
+    )]
+    pub add_raffle: Account<'info, RaffleAccount>,
+    #[account(mut)]
+    pub signer: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
 
 #[repr(packed)]
 #[account(zero_copy)]

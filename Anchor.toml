@@ -1,11 +1,11 @@
 [features]
 seeds = false
 skip-lint = false
-[programs.localnet]
-vrf_client = "EmPZGD34KDCtdwtqJU5VGoqidDQLyW1eyBXvj4yb2W9i"
+[programs.devnet]
+vrf_client = "Ak2Nbu9xwhmMjazYxU5Hmy1xW6T8ffVrPTZhToB7T6F"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
